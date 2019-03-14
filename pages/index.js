@@ -49,42 +49,71 @@ export default class Index extends React.Component {
         {
           id: 1,
           class: "",
-          backgroundColor: "",
+          backgroundColor: "#D9DCDE",
           done: false
         },
         {
           id: 2,
           class: "",
-          backgroundColor: "",
+          backgroundColor: "#E9ECED",
           done: false
         },
         {
           id: 3,
           class: "",
-          backgroundColor: "",
+          backgroundColor: "#D9DCDE",
           done: false
         },
         {
           id: 4,
           class: "",
-          backgroundColor: "",
+          backgroundColor: "#E9ECED",
           done: false
         },
         {
           id: 5,
           class: "",
-          backgroundColor: "",
+          backgroundColor: "#D9DCDE",
           done: false
-        },
-        {
-          id: 6,
-          class: "",
-          backgroundColor: "",
-          done: false
-        },
+        }
       ]
     }
+    this.onNextStep1 = this.onNextStep1.bind(this);
   }
+
+  createCardList1() {
+    var {currentIndex, anim1} = this.state;
+    var list = [];
+    if(currentIndex == 0){
+      list.push(<input type="text" style={{backgroundColor: this.state.anim1[1].backgroundColor}} className="cardInput" placeholder="" name="text" id="text" />);
+      list.push(<input type="text" style={{backgroundColor: this.state.anim1[0].backgroundColor}} className="cardInput" placeholder="" name="text" id="text" />);
+    } else {
+      if(currentIndex <= 2) {
+        for(let i=currentIndex + 2; i>=currentIndex; i--) {
+          list.push(<input type="text" style={{backgroundColor: this.state.anim1[i].backgroundColor}} className="cardInput" placeholder="" name="text" id="text" />);
+        }
+      } else {
+        for(let i=4; i>=currentIndex; i--) {
+          list.push(<input type="text" style={{backgroundColor: this.state.anim1[i].backgroundColor}} className="cardInput" placeholder="" name="text" id="text" />);
+        }
+        for(let i=0; i<=3-(6-currentIndex); i++){
+          list.push(<input type="text" style={{display: 'none'}} className="cardInput" placeholder="" name="text" id="text" />);
+        }
+      }
+    }
+    return list;
+  }
+
+  onNextStep1() {
+    var currentIndex = this.state.currentIndex;
+    if(currentIndex < 4) {
+      currentIndex += 1;
+    }
+    this.setState({
+      currentIndex: currentIndex
+    });
+  }
+
   render(){
     const {posts} = this.props
   return (
@@ -127,21 +156,20 @@ export default class Index extends React.Component {
                         <div className="contain">
                             <div className="card-stack">
                               <ul className="card-list">
-                                <input type="text" style={{backgroundColor: "#D9DCDE"}} className="cardInput" placeholder="" name="text" id="text" />
+                                { this.createCardList1() }
 
-                                <input type="text" style={{backgroundColor: "#E9ECED"}} className="cardInput" placeholder="" name="text" id="text" />
-
-                                <Select
-                                      className="country-home"
-                                      classNamePrefix="home-country-select"
-                                      placeholder="Country of scholarship..."
-                                      isClearable={true}
-                                      isSearchable={true}
-                                      onChange={(e)=>console.log(e.id)}
-                                      name="countries"
-                                      components={{ Option: IconOption, SingleValue, SelectContainer }}
-                                      options={COUNTRIES}
-                                    />                      
+                                { (this.state.currentIndex == 0)?
+                                  (<Select
+                                    className="country-home"
+                                    classNamePrefix="home-country-select"
+                                    placeholder="Country of scholarship..."
+                                    isClearable={true}
+                                    isSearchable={true}
+                                    onChange={(e)=>console.log(e.id)}
+                                    name="countries"
+                                    components={{ Option: IconOption, SingleValue, SelectContainer }}
+                                    options={COUNTRIES}
+                                  />):(null)}
                               </ul>
                               <div className="learn-more">
                                     <span className="icon has-text-info push-away">
@@ -154,7 +182,7 @@ export default class Index extends React.Component {
                     </div>
 
                     <div className="column with-button is-4-desktop is-4-tablet">
-                      <a className="button yellowBtn nextBtn">Next step</a> 
+                      <button className="button yellowBtn nextBtn" onClick={this.onNextStep1}>Next step</button>
                     </div>
                 
                 </div>
